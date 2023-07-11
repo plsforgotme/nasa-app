@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Mars Rover Photos</title>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-top">
+            <h1>Mars Rover Vision</h1>
+            
+        </div>
+        <div class="header-content">
+            
+        </div>
+            
+    </header>
+    <main class="main">
+
+    </main>
+    <footer class="footer"> 
+
+    </footer>
+    
+    <form>
+        <label for="rover">Select Rover:</label>
+        <select class="select-rover" id="rover">
+            <option value="curiosity">Curiosity</option>
+            <option value="opportunity">Opportunity</option>
+            <option value="spirit">Spirit</option>
+        </select>
+        <label for="date">Select Date:</label>
+        <input class="datepicker" type="date" id="date">
+        <button type="button" onclick="getPhotos()">Get Photos</button>
+    </form>
+    <div id="photos"></div>
+
+    <script src="https://kit.fontawesome.com/0b2885cd68.js" crossorigin="anonymous"></script>
+    <script>
+        function getPhotos() {
+            let rover = document.getElementById("rover").value;
+            let date = document.getElementById("date").value;
+
+            let apiUrl = `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}/photos?earth_date=${date}&api_key=VSgWdCvQrQbapRC8kVq7aii0cL9ouh1oFc0thmE7`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    let photos = data.photos.slice(0, 25); // Ограничиваем до 25 фотографий
+                    let photoContainer = document.getElementById("photos");
+                    photoContainer.innerHTML = ""; // Очищаем предыдущие фотографии
+
+                    photos.forEach(photo => {
+                        let img = document.createElement("img");
+                        img.src = photo.img_src;
+                        img.alt = "Mars Rover Photo";
+                        photoContainer.appendChild(img);
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                    alert("An error occurred while fetching photos.");
+                });
+        }
+    </script>
+</body>
+
+</html>
